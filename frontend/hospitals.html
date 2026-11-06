@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitaRoute | Hospitals</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"></div><div><h3>VitaRoute</h3></div></div>
+      <p class="sidebar-label">Simulation Console</p>
+      <nav>
+        <a class="nav-item" href="/admin-dashboard">Overview</a>
+        <a class="nav-item active" href="/hospitals">Hospitals</a>
+        <a class="nav-item" href="/patients">Patients</a>
+        <a class="nav-item" href="/organs">Organs</a>
+        <a class="nav-item" href="/matching">Run Matching</a>
+        <a class="nav-item" href="/matches">Matches</a>
+        <a class="nav-item" href="/transit">Transit</a>
+        <a class="nav-item" href="/csp-center">CSP Center</a>
+      </nav>
+      <div class="signoff"><button id="logoutButton" class="btn btn-secondary" style="width:100%;">Sign Out</button></div>
+    </aside>
+    <main class="content">
+      <div class="topbar"><div><div class="breadcrumb">VitaRoute / Hospitals</div><h1 class="page-title">Hospitals</h1></div><a class="btn btn-primary" href="/register-hospital">Add Hospital</a></div>
+      <p class="small-muted">Sample Tamil Nadu hospital accounts use fictional demo credentials and contact details.</p>
+      <section class="card"><table class="table"><thead><tr><th>Hospital Name</th><th>Hospital ID</th><th>Email</th><th>Address</th><th>Location</th><th>Type</th><th>Status</th><th>Contact Person</th><th>Contact</th></tr></thead><tbody id="hospitalsTable"></tbody></table></section>
+    </main>
+  </div>
+  <script src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await bootstrapSession();
+      const rows = await fetch('/api/hospitals').then(r => r.json());
+      const tbody = document.getElementById('hospitalsTable');
+      rows.forEach(item => {
+        const tr = document.createElement('tr');
+        const values = [
+          item.name || item.hospital_name || 'Unknown',
+          item.hospital_id || item.hospitalId || 'N/A',
+          item.email || 'N/A',
+          [item.address, item.pin_code].filter(Boolean).join(', ') || 'N/A',
+          [item.city, item.district, item.state].filter(Boolean).filter((value, index, list) => list.indexOf(value) === index).join(', ') || 'N/A',
+          item.hospital_type || 'General',
+          item.status || 'Pending',
+          item.contact_person || 'N/A',
+          item.contact_number || 'N/A'
+        ];
+        values.forEach((value, index) => {
+          const td = document.createElement('td');
+          td.textContent = value;
+          if (index === 6) {
+            const status = document.createElement('span');
+            status.className = `status-tag status-${String(value).toLowerCase()}`;
+            status.textContent = value;
+            td.textContent = '';
+            td.appendChild(status);
+          }
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    });
+  </script>
+</body>
+</html>

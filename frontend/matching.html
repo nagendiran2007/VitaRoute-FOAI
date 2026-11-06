@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>VitaRoute | Matching</title><link rel="stylesheet" href="/css/styles.css" /></head>
+<body>
+  <div class="app-shell"><aside class="sidebar"><div class="brand"><div class="brand-mark"></div><div><h3>VitaRoute</h3></div></div><p class="sidebar-label">Simulation Console</p><nav><a class="nav-item" href="/admin-dashboard">Overview</a><a class="nav-item" href="/hospitals">Hospitals</a><a class="nav-item" href="/patients">Patients</a><a class="nav-item" href="/organs">Organs</a><a class="nav-item active" href="/matching">Run Matching</a><a class="nav-item" href="/matches">Matches</a><a class="nav-item" href="/transit">Transit</a><a class="nav-item" href="/csp-center">CSP Center</a></nav><div class="signoff"><button id="logoutButton" class="btn btn-secondary" style="width:100%;">Sign Out</button></div></aside>
+    <main class="content"><div class="topbar"><div><div class="breadcrumb">VitaRoute / Matching</div><h1 class="page-title">Run Intelligent Matching</h1></div><button id="runMatchingButton" class="btn btn-primary">Run Matching</button></div><section class="card"><h3>Eligibility Engine</h3><p>Matching uses registered, medically eligible waiting patients and currently available organs. Results are illustrative and require clinical review; route estimates are shown only when hospital coordinates are available.</p><ul><li>Organ type and blood compatibility checked</li><li>Medical eligibility enforced</li><li>Urgency and HLA compatibility considered</li><li>Available organs are reserved when a match is created</li></ul><div id="messageBox" style="display:none; margin-top:18px; font-weight:600;"></div><div id="matchResults" hidden style="margin-top:20px;"><h3>Matching Results</h3><div style="overflow-x:auto;"><table class="table"><thead><tr><th>Patient</th><th>Required Organ</th><th>Blood Group</th><th>Priority</th><th>Organ ID</th><th>Donor Hospital</th><th>Compatibility</th><th>Route Estimate</th><th>Status</th></tr></thead><tbody id="matchResultsTable"></tbody></table></div><p class="small-muted">Sample matching output only; alternatives are unassigned suggestions, not transplant recommendations.</p></div></section></main>
+  </div>
+  <script src="/js/app.js"></script>
+  <script>
+    document.getElementById('runMatchingButton').addEventListener('click', async () => {
+      const box = document.getElementById('messageBox');
+      box.style.display = 'block';
+      box.style.color = '#8bdcc0';
+      box.textContent = 'Running matching against registered patients and available organs…';
+      const button = document.getElementById('runMatchingButton');
+      button.disabled = true;
+      try {
+        const response = await fetch('/api/matches/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || result.error || 'Unable to run match engine.');
+        }
+        const matches = result.matches || [];
+        const alternatives = result.alternatives || [];
+        box.textContent = `Match run complete: ${matches.length} new assignment(s) created; ${alternatives.length} sample alternative(s) shown as unassigned.`;
+        const results = document.getElementById('matchResults');
+        const tbody = document.getElementById('matchResultsTable');
+        tbody.replaceChildren();
+        [...matches, ...alternatives].forEach(item => {
+          const tr = document.createElement('tr');
+          const route = item.distance_km == null
+            ? 'Not available'
+            : `${item.distance_km} km${item.travel_time_hours == null ? '' : ` / ${item.travel_time_hours} hr`}`;
+          [
+            `${item.patient_name || item.patient_id} (${item.patient_id})`,
+            item.organ_type || item.organ_required || 'N/A',
+            item.patient_blood_group || 'N/A',
+            item.patient_priority || 'Normal',
+            item.organ_id || 'N/A',
+            item.donor_hospital_name || item.donor_hospital_id || 'N/A',
+            `${item.compatibility_score == null ? 'Compatible' : `${Math.round(item.compatibility_score * 100)}% HLA score`}`,
+            route,
+            item.status || 'Pending'
+          ].forEach(value => {
+            const td = document.createElement('td');
+            td.textContent = value;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        results.hidden = matches.length + alternatives.length === 0;
+      } catch (error) {
+        box.style.color = '#d68a7d';
+        box.textContent = error.message || 'Unable to reach the match engine. Please try again.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

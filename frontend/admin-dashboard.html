@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitaRoute | Overview</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <h3>VitaRoute</h3>
+        </div>
+      </div>
+      <p class="sidebar-label">Simulation Console</p>
+      <nav>
+        <a class="nav-item active" href="/admin-dashboard">Overview</a>
+        <a class="nav-item" href="/hospitals">Hospitals</a>
+        <a class="nav-item" href="/patients">Patients</a>
+        <a class="nav-item" href="/organs">Organs</a>
+        <a class="nav-item" href="/matching">Run Matching</a>
+        <a class="nav-item" href="/matches">Matches</a>
+        <a class="nav-item" href="/transit">Transit</a>
+        <a class="nav-item" href="/csp-center">CSP Center</a>
+      </nav>
+      <div class="signoff">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:#8bdcc0;display:grid;place-items:center;color:#10221d;font-weight:700;">A</div>
+          <div>
+            <div style="font-weight:700;" data-profile-name>Admin User</div>
+            <div class="small-muted" data-profile-role>System Administrator</div>
+          </div>
+        </div>
+        <button id="logoutButton" class="btn btn-secondary" style="margin-top:18px; width:100%;">Sign Out</button>
+      </div>
+    </aside>
+    <main class="content">
+      <div class="topbar">
+        <div>
+          <div class="breadcrumb">VitaRoute / Overview</div>
+          <h1 class="page-title">Good day, Admin.</h1>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end;">
+          <div class="status-pill">Fictional Demo / System Status</div>
+          <a class="btn btn-primary" href="/matching">Run Intelligent Matching</a>
+        </div>
+      </div>
+      <div class="dashboard-grid" id="overviewStats">
+        <div class="card stat-card"><div class="label">Total Hospitals</div><div class="value" data-stat="total_hospitals">0</div></div>
+        <div class="card stat-card"><div class="label">Total Patients</div><div class="value" data-stat="total_patients">0</div></div>
+        <div class="card stat-card"><div class="label">Available Organs</div><div class="value" data-stat="available_organs">0</div></div>
+        <div class="card stat-card"><div class="label">Critical Patients</div><div class="value" data-stat="critical_patients">0</div></div>
+        <div class="card stat-card"><div class="label">Successful Matches</div><div class="value" data-stat="successful_matches">0</div></div>
+        <div class="card stat-card"><div class="label">Active Transits</div><div class="value" data-stat="active_transits">0</div></div>
+        <div class="card stat-card"><div class="label">Failed Matches</div><div class="value" data-stat="failed_matches">0</div></div>
+      </div>
+      <div class="row">
+        <section class="col card">
+          <h3>Patient Urgency</h3>
+          <div class="progress-wrap"><div class="progress-label"><span>Critical</span><span>2</span></div><div class="progress"><span style="width:78%"></span></div></div>
+          <div class="progress-wrap"><div class="progress-label"><span>High</span><span>4</span></div><div class="progress"><span style="width:63%"></span></div></div>
+          <div class="progress-wrap"><div class="progress-label"><span>Medium</span><span>6</span></div><div class="progress"><span style="width:52%"></span></div></div>
+          <div class="progress-wrap"><div class="progress-label"><span>Low</span><span>8</span></div><div class="progress"><span style="width:34%"></span></div></div>
+        </section>
+        <section class="col card">
+          <h3>Organ Inventory</h3>
+          <div class="progress-wrap"><div class="progress-label"><span>Available</span><span>4</span></div><div class="progress"><span style="width:70%"></span></div></div>
+          <div class="progress-wrap"><div class="progress-label"><span>Reserved</span><span>2</span></div><div class="progress"><span style="width:55%"></span></div></div>
+          <div class="progress-wrap"><div class="progress-label"><span>In Transit</span><span>1</span></div><div class="progress"><span style="width:25%"></span></div></div>
+          <div class="progress-wrap"><div class="progress-label"><span>Delivered</span><span>3</span></div><div class="progress"><span style="width:42%"></span></div></div>
+        </section>
+      </div>
+      <div class="row">
+        <section class="col card">
+          <h3>Participating Hospitals</h3>
+          <table class="table">
+            <thead><tr><th>Hospital</th><th>Location</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>City General Hospital</td><td>Boston, MA</td><td><span class="status-tag status-approved">Approved</span></td></tr>
+              <tr><td>North Ridge Medical Centre</td><td>Chicago, IL</td><td><span class="status-tag status-approved">Approved</span></td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="/js/app.js"></script>
+</body>
+</html>

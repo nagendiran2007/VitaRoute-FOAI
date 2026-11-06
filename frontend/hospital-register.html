@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitaRoute | Hospital Registration</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body style="padding:24px;">
+  <div class="form-card">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <div style="font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted);">VitaRoute</div>
+        <div style="font-size:0.82rem; color:var(--muted);">Intelligent Transit System</div>
+      </div>
+    </div>
+    <h2 style="margin-top:18px;">Hospital Registration</h2>
+    <div id="messageBox" style="display:none; margin:12px 0; font-weight:600;"></div>
+    <form id="hospitalRegistrationForm">
+      <div class="form-grid">
+        <label><span>Hospital Name</span><input type="text" name="hospital_name" required /></label>
+        <label><span>Hospital Registration ID</span><input type="text" name="hospital_registration_id" required /></label>
+        <label><span>Hospital Type</span><input type="text" name="hospital_type" required /></label>
+        <label><span>Email</span><input type="email" name="email" required /></label>
+        <label><span>Username</span><input type="text" name="username" required /></label>
+        <label><span>Password</span><input type="password" name="password" required /></label>
+        <label><span>Confirm Password</span><input type="password" name="confirm_password" required /></label>
+        <label><span>Contact Person</span><input type="text" name="contact_person" required /></label>
+        <label><span>Contact Number</span><input type="text" name="contact_number" required /></label>
+        <label><span>Alternate Contact</span><input type="text" name="alternate_contact" /></label>
+        <label><span>Address</span><input type="text" name="address" required /></label>
+        <label><span>City</span><input type="text" name="city" required /></label>
+        <label><span>District</span><input type="text" name="district" /></label>
+        <label><span>State</span><input type="text" name="state" required /></label>
+        <label><span>PIN Code</span><input type="text" name="pin_code" required /></label>
+        <label><span>Latitude</span><input type="number" step="0.0001" name="latitude" /></label>
+        <label><span>Longitude</span><input type="number" step="0.0001" name="longitude" /></label>
+      </div>
+      <div style="margin-top:16px; display:flex; gap:12px;">
+        <button class="btn btn-primary" type="submit">Submit Registration</button>
+        <a class="btn btn-secondary" href="/login">Back to Login</a>
+      </div>
+    </form>
+  </div>
+  <script src="/js/app.js"></script>
+</body>
+</html>

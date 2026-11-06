@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitaRoute | Patients</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar"><div class="brand"><div class="brand-mark"></div><div><h3>VitaRoute</h3></div></div><p class="sidebar-label">Hospital Console</p><nav><a class="nav-item" href="/hospital-dashboard">Overview</a><a class="nav-item active" href="/patients">Required-organ patient list</a><a class="nav-item" href="/donors">Organ donors</a><a class="nav-item" href="/organs">Organ inventory</a><a class="nav-item" href="/matching">Run Matching</a><a class="nav-item" href="/matches">Matching results</a><a class="nav-item" href="/notifications">Notifications</a><a class="nav-item" href="/transit">Transportation</a></nav><div class="signoff"><button id="logoutButton" class="btn btn-secondary" style="width:100%;">Sign Out</button></div></aside>
+    <main class="content"><div class="topbar"><div><div class="breadcrumb">VitaRoute / Patient management</div><h1 class="page-title">Required-organ patients</h1></div><a class="btn btn-primary" href="/patient-register">Register Patient</a></div><p class="small-muted">Patients registered to your hospital, waiting for the required organ.</p><section class="card"><div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;"><select id="organFilter" aria-label="Filter by required organ" style="max-width:220px;"><option value="">All required organs</option><option>Kidney</option><option>Liver</option><option>Heart</option><option>Lungs</option><option>Pancreas</option><option>Intestine</option><option>Cornea</option></select><select id="urgencyFilter" aria-label="Filter by urgency" style="max-width:180px;"><option value="">All urgency levels</option><option>Critical</option><option>High</option><option>Medium</option><option>Normal</option></select></div><table class="table"><thead><tr><th>Patient</th><th>Organ Required</th><th>Blood Group / HLA</th><th>Urgency</th><th>Status</th></tr></thead><tbody id="patientsTable"></tbody></table><p id="emptyPatients" class="small-muted" hidden>No patients are registered for this hospital yet.</p></section></main>
+  </div>
+  <script src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await bootstrapSession();
+      const rows = await fetch('/api/patients').then(r => r.json());
+      const tbody = document.getElementById('patientsTable');
+      if (!Array.isArray(rows)) return;
+      rows.forEach(item => {
+        const tr = document.createElement('tr');
+        [item.patient_name || item.patient_id, item.organ_required || 'N/A', `${item.blood_group || 'N/A'} / ${item.hla_info || 'Not Set'}`, item.urgency || 'Normal', item.status || 'Waiting'].forEach(value => {
+          const td = document.createElement('td');
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+        tr.dataset.organ = item.organ_required || '';
+        tr.dataset.urgency = item.urgency || 'Normal';
+        tbody.appendChild(tr);
+      });
+      const filterRows = () => {
+        const organ = document.getElementById('organFilter').value;
+        const urgency = document.getElementById('urgencyFilter').value;
+        let visible = 0;
+        tbody.querySelectorAll('tr').forEach(row => {
+          const show = (!organ || row.dataset.organ === organ) && (!urgency || row.dataset.urgency === urgency);
+          row.hidden = !show;
+          if (show) visible += 1;
+        });
+        document.getElementById('emptyPatients').hidden = visible > 0;
+      };
+      document.getElementById('organFilter').addEventListener('change', filterRows);
+      document.getElementById('urgencyFilter').addEventListener('change', filterRows);
+      filterRows();
+    });
+  </script>
+</body>
+</html>

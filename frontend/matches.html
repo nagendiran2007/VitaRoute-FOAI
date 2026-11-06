@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>VitaRoute | Matches</title><link rel="stylesheet" href="/css/styles.css" /></head>
+<body>
+  <div class="app-shell"><aside class="sidebar"><div class="brand"><div class="brand-mark"></div><div><h3>VitaRoute</h3></div></div><p class="sidebar-label">Simulation Console</p><nav><a class="nav-item" href="/admin-dashboard">Overview</a><a class="nav-item" href="/hospitals">Hospitals</a><a class="nav-item" href="/patients">Patients</a><a class="nav-item" href="/organs">Organs</a><a class="nav-item" href="/matching">Run Matching</a><a class="nav-item active" href="/matches">Matches</a><a class="nav-item" href="/transit">Transit</a><a class="nav-item" href="/csp-center">CSP Center</a></nav><div class="signoff"><button id="logoutButton" class="btn btn-secondary" style="width:100%;">Sign Out</button></div></aside>
+    <main class="content"><div class="topbar"><div><div class="breadcrumb">VitaRoute / Matches</div><h1 class="page-title">Matches</h1></div></div><p class="small-muted">Demo matching results are illustrative only and are not clinical recommendations.</p><section class="card"><table class="table"><thead><tr><th>Match ID</th><th>Organ Type</th><th>Donor Hospital</th><th>Recipient Hospital</th><th>Patient</th><th>Priority</th><th>Status</th></tr></thead><tbody id="matchesTable"></tbody></table></section></main>
+  </div>
+  <script src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await bootstrapSession();
+      const rows = await fetch('/api/matches').then(r => r.json());
+      const tbody = document.getElementById('matchesTable');
+      rows.forEach(item => {
+        const tr = document.createElement('tr');
+        [
+          item.match_id || 'N/A',
+          item.organ_type || 'N/A',
+          item.donor_hospital_name || item.donor_hospital_id || 'N/A',
+          item.recipient_hospital_name || item.recipient_hospital_id || 'N/A',
+          `${item.patient_name || 'Patient'} (${item.patient_id || 'N/A'})`,
+          item.patient_priority || 'Normal',
+          item.status || 'Pending'
+        ].forEach(value => {
+          const td = document.createElement('td');
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    });
+  </script>
+</body>
+</html>

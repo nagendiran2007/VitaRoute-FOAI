@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitaRoute | Login</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="login-screen">
+    <div class="login-overlay"></div>
+    <div class="login-card">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div style="font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:#56736a;">VitaRoute</div>
+          <div style="font-size:0.82rem; color:#56736a;">Intelligent Transit System</div>
+        </div>
+      </div>
+      <h2 style="color:#10221d; margin-top:14px;">Sign in to your workspace</h2>
+      <div id="databaseStatus" role="status" style="margin:10px 0 14px; font-size:0.84rem; color:#56736a;">Checking database connection…</div>
+      <div id="messageBox" style="display:none; margin:14px 0; font-weight:600;"></div>
+      <form id="loginForm">
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" placeholder="name@hospital.example" autocomplete="username" required />
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" name="password" placeholder="Enter password" required />
+        </label>
+        <button class="btn btn-primary block" id="loginButton" type="submit" disabled>Enter VitaRoute</button>
+      </form>
+      <div style="margin-top:18px; text-align:center;">
+        <a href="/register-hospital" style="color:#10221d; font-weight:600;">Register hospital</a>
+      </div>
+      <details class="demo-accounts">
+        <summary>View sample Tamil Nadu hospital accounts</summary>
+        <p>These are fictional demo credentials, not official hospital accounts or contact emails. Use the same demo password for all listed hospitals except Apollo.</p>
+        <div class="demo-account-list">
+          <div><strong>Apollo Hospitals Chennai</strong><span>apollo@gmail.com</span><code>apollo123456</code></div>
+          <div><strong>MIOT International</strong><span>miot.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Kauvery Hospital Chennai</strong><span>kauvery.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>MGM Healthcare</strong><span>mgm.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Fortis Malar Hospital</strong><span>fortis.malar.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Sri Ramachandra Medical Centre</strong><span>srmc.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Christian Medical College Vellore</strong><span>cmc.vellore.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>PSG Hospitals</strong><span>psg.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Kovai Medical Center and Hospital</strong><span>kmch.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Meenakshi Mission Hospital</strong><span>mmh.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Government Rajaji Hospital</strong><span>rajaji.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Tirunelveli Medical College Hospital</strong><span>tirunelveli.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Thanjavur Medical College Hospital</strong><span>thanjavur.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Government Mohan Kumaramangalam Medical College Hospital</strong><span>salem.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Government Erode Medical College Hospital</strong><span>erode.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Kanyakumari Government Medical College Hospital</strong><span>kanyakumari.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Government Villupuram Medical College Hospital</strong><span>villupuram.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Government Dharmapuri Medical College Hospital</strong><span>dharmapuri.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Dindigul Medical College Hospital</strong><span>dindigul.demo@vitaroute.example</span><code>TNVita@123</code></div>
+          <div><strong>Government Sivagangai Medical College Hospital</strong><span>sivagangai.demo@vitaroute.example</span><code>TNVita@123</code></div>
+        </div>
+      </details>
+      <p style="font-size:0.78rem; color:#5a6c68; margin-top:16px;">Use your registered email to sign in. Demo accounts are for local development only.</p>
+    </div>
+  </div>
+  <script src="/js/app.js"></script>
+</body>
+</html>

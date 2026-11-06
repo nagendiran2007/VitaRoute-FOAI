@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>VitaRoute | Notifications</title><link rel="stylesheet" href="/css/styles.css" /></head>
+<body>
+  <div class="app-shell"><aside class="sidebar"><div class="brand"><div class="brand-mark"></div><div><h3>VitaRoute</h3></div></div><p class="sidebar-label">Simulation Console</p><nav><a class="nav-item" href="/admin-dashboard">Overview</a><a class="nav-item" href="/hospitals">Hospitals</a><a class="nav-item" href="/patients">Patients</a><a class="nav-item" href="/organs">Organs</a><a class="nav-item" href="/matching">Run Matching</a><a class="nav-item" href="/matches">Matches</a><a class="nav-item" href="/transit">Transit</a><a class="nav-item" href="/csp-center">CSP Center</a></nav><div class="signoff"><button id="logoutButton" class="btn btn-secondary" style="width:100%;">Sign Out</button></div></aside>
+    <main class="content"><div class="topbar"><div><div class="breadcrumb">VitaRoute / Notifications</div><h1 class="page-title">Notifications</h1></div></div><section class="card"><table class="table"><thead><tr><th>Message</th><th>Type</th><th>Status</th></tr></thead><tbody id="notificationsTable"></tbody></table></section></main>
+  </div>
+  <script src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await bootstrapSession();
+      const rows = await fetch('/api/notifications').then(r => r.json());
+      const tbody = document.getElementById('notificationsTable');
+      rows.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${item.message || 'New notification'}</td><td>${item.type || 'Match'}</td><td>${item.status || 'Pending'}</td>`;
+        tbody.appendChild(tr);
+      });
+    });
+  </script>
+</body>
+</html>

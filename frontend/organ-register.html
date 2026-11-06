@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitaRoute | Register Organ</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body style="padding:24px;">
+  <div class="form-card">
+    <div class="brand"><div class="brand-mark"></div><div><div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);">VitaRoute</div><div style="font-size:.82rem;color:var(--muted);">Organ inventory</div></div></div>
+    <h2 style="margin-top:18px;">Register donated organ</h2>
+    <p class="small-muted">New organs become match-eligible only after consent is confirmed and medical approval is granted.</p>
+    <div id="messageBox" style="display:none;margin:12px 0;font-weight:600;"></div>
+    <form id="organForm">
+      <div class="form-grid">
+        <label><span>Registered donor</span><select name="donor_id" id="donorSelect" required><option value="">Loading donors…</option></select></label>
+        <label><span>Organ type</span><select name="organ_type" required><option>Kidney</option><option>Liver</option><option>Heart</option><option>Lungs</option><option>Pancreas</option><option>Intestine</option><option>Cornea</option></select></label>
+        <label><span>Blood group</span><select name="blood_group" required><option>O-</option><option>O+</option><option>A-</option><option>A+</option><option>B-</option><option>B+</option><option>AB-</option><option>AB+</option></select></label>
+        <label><span>Condition</span><select name="condition" required><option>Excellent</option><option>Good</option><option>Fair</option></select></label>
+        <label><span>Consent</span><select name="consent" required><option>Confirmed</option><option>Pending</option><option>Rejected</option></select></label>
+        <label><span>Medical approval</span><select name="medical_approval" required><option>Pending</option><option>Approved</option><option>Rejected</option></select></label>
+        <label><span>Viability (%)</span><input name="viability" type="number" min="0" max="100" value="85" required /></label>
+        <label><span>Expiry date and time</span><input name="expiry_datetime" type="datetime-local" required /></label>
+        <label><span>HLA / tissue code (optional)</span><input name="hla_code" /></label>
+        <label><span>Preservation method (optional)</span><input name="preservation_method" /></label>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;">
+        <button class="btn btn-primary" id="submitOrgan" type="submit" disabled>Save organ</button>
+        <a class="btn btn-secondary" href="/donors">Back to donor list</a>
+      </div>
+    </form>
+  </div>
+  <script src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await bootstrapSession();
+      if (!user) return;
+      const response = await fetch('/api/donors');
+      const donors = await response.json();
+      const select = document.getElementById('donorSelect');
+      select.replaceChildren(new Option(donors.length ? 'Select a donor' : 'Register a donor first', ''));
+      donors.forEach(donor => select.add(new Option(`${donor.donor_name} (${donor.donor_id})`, donor.donor_id)));
+      const requestedDonor = new URLSearchParams(location.search).get('donor_id');
+      if (requestedDonor && donors.some(donor => donor.donor_id === requestedDonor)) select.value = requestedDonor;
+      document.getElementById('submitOrgan').disabled = donors.length === 0;
+    });
+    document.getElementById('organForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      payload.viability = Number(payload.viability);
+      const response = await fetch('/api/register-organ', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      const message = document.getElementById('messageBox');
+      message.hidden = false;
+      message.style.display = 'block';
+      message.textContent = result.message || 'Could not register organ.';
+      message.style.color = result.success ? '#247b5a' : '#a1433b';
+      if (result.success) setTimeout(() => location.href = '/organs', 900);
+    });
+  </script>
+</body>
+</html>

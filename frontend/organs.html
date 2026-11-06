@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" /><title>VitaRoute | Organs</title><link rel="stylesheet" href="/css/styles.css" /></head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar"><div class="brand"><div class="brand-mark"></div><div><h3>VitaRoute</h3></div></div><p class="sidebar-label">Hospital Console</p><nav><a class="nav-item" href="/hospital-dashboard">Overview</a><a class="nav-item" href="/patients">Required-organ patient list</a><a class="nav-item" href="/donors">Organ donors</a><a class="nav-item active" href="/organs">Organ inventory</a><a class="nav-item" href="/matching">Run Matching</a><a class="nav-item" href="/matches">Matching results</a><a class="nav-item" href="/notifications">Notifications</a><a class="nav-item" href="/transit">Transportation</a></nav><div class="signoff"><button id="logoutButton" class="btn btn-secondary" style="width:100%;">Sign Out</button></div></aside>
+    <main class="content"><div class="topbar"><div><div class="breadcrumb">VitaRoute / Organ inventory</div><h1 class="page-title">Organ inventory</h1></div><a class="btn btn-primary" href="/organ-register">Register organ</a></div><p class="small-muted">Organs donated through your hospital. New entries remain pending until medical approval and consent are confirmed.</p><section class="card"><table class="table"><thead><tr><th>Organ</th><th>Organ ID</th><th>Blood Group / HLA</th><th>Donor Hospital</th><th>Condition</th><th>Consent</th><th>Viability</th><th>Status</th></tr></thead><tbody id="organsTable"></tbody></table></section></main>
+  </div>
+  <script src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await bootstrapSession();
+      const rows = await fetch('/api/organs').then(r => r.json());
+      const tbody = document.getElementById('organsTable');
+      rows.forEach(item => {
+        const tr = document.createElement('tr');
+        [item.organ_type || 'N/A', item.organ_id || 'N/A', `${item.blood_group || 'N/A'} / ${item.hla_code || 'Not set'}`, item.donor_hospital_name || 'N/A', item.condition || 'N/A', item.consent || 'Pending', `${item.viability ?? 'N/A'}${item.viability == null ? '' : '%'}`, item.status || 'Pending Approval'].forEach(value => {
+          const td = document.createElement('td');
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    });
+  </script>
+</body>
+</html>
